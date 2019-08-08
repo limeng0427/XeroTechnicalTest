@@ -6,7 +6,7 @@
     Your job is to fix them and make sure you can perform the functions in each method below.
 
     Note your first job is to get the solution compiling! 
-	
+    
     Rules
     ---------------------------------------------------------------------------------
     * The entire solution must be written in C# (any version)
@@ -21,170 +21,71 @@
     When you have finished the solution please zip it up and email it back to the recruiter or developer who sent it to you
 */
 
+/*
+ * Task Summary
+ * 1. Fix compile issues: wrong spelling * 1, data type mismatching * 2.
+ * 2. Rearrange solution folder structure. Add Unit Test and Libary projects. 
+ * 3. Implement unfinished functions.
+ * 4. Add Autofaq to realize ioc.
+ * 5. Add Unit Test using xUnit. 17 unit test cases added.
+ * 6. Add Log Utility. Add ability to switch to different logging mode.
+ * 7. Remove Unnecessary Reference and Library.
+ */
+
+
 using System;
-using System.Collections.Generic;
+using Autofac;
+using XeroTechnicalTest.BusinessServices;
+using XeroTechnicalTest.Interfaces;
+using XeroTechnicalTestLibrary;
+
 
 namespace XeroTechnicalTest
 {
     public class Program
     {
+        // autofaq: ioc tool
+        private static IContainer _container { get; set; }
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Xero Tech Test!");
 
-            CreateInvoiceWithOneIte();
-            CreateInvoiceWithMultipleItemsAndQuantities();
-            RemoveItem();
-            MergeInvoices();
-            CloneInvoice();
-            InvoiceToString();
+            StartService();
+
+            Console.ReadLine();
         }
 
-        private static void CreateInvoiceWithOneItem()
+        static private void StartService()
         {
-            var invoice = new Invoice();
+            var builder = new ContainerBuilder();
+            builder.RegisterType<InvoiceService>().As<IInvoiceService>();
+            _container = builder.Build();
+            using (ILifetimeScope scope = _container.BeginLifetimeScope())
+            {
+                //get dependency object
+                var invoiceService = scope.Resolve<IInvoiceService>();
+                var logger = new LogManager();
 
-           invoice.AddInvoiceLine(new InvoiceLine(){
-                InvoiceLineId = "1",
-                Cost = 6.99,
-                Quantity = 1,
-                Description = "Apple"
-            });
+                logger.Log($"1. Start Task: CreateInvoiceWithOneItem");
+                invoiceService.CreateInvoiceWithOneItem();
 
-            Console.WriteLine(invoice.GetTotal());
+                logger.Log($"2. Start Task: CreateInvoiceWithMultipleItemsAndQuantities");
+                invoiceService.CreateInvoiceWithMultipleItemsAndQuantities();
+
+                logger.Log($"3. Start Task: RemoveItem");
+                invoiceService.RemoveItem();
+
+                logger.Log($"4. Start Task: MergeInvoices");
+                invoiceService.MergeInvoices();
+
+                logger.Log($"5. Start Task: CloneInvoice");
+                invoiceService.CloneInvoice();
+
+                logger.Log($"6. Start Task: InvoiceToString");
+                invoiceService.InvoiceToString();
+
+            }
         }
 
-        private static void CreateInvoiceWithMultipleItemsAndQuantities()
-        {
-            var invoice = new Invoice();
-
-            invoice.AddInvoiceLine(new InvoiceLine()
-            {
-                InvoiceLineId = 1,
-                Cost = 10.21m,
-                Quantity = 4,
-                Description = "Banana"
-            });
-
-            invoice.AddInvoiceLine(new InvoiceLine()
-            {
-                InvoiceLineId = 2,
-                Cost = 5.21,
-                Quantity = 1,
-                Description = "Orange"
-            });
-
-            invoice.AddInvoiceLine(new InvoiceLine()
-            {
-                InvoiceLineId = 3,
-                Cost = 5.21,
-                Quantity = 5,
-                Description = "Pineapple"
-            });
-
-            Console.WriteLine(invoice.GetTotal());
-        }
-
-        private static void RemoveItem()
-        {
-            var invoice = new Invoice();
-
-            invoice.AddInvoiceLine(new InvoiceLine()
-            {
-                InvoiceLineId = 1,
-                Cost = 5.21,
-                Quantity = 1,
-                Description = "Orange"
-            });
-
-            invoice.AddInvoiceLine(new InvoiceLine()
-            {
-                InvoiceLineId = 2,
-                Cost = 10.99,
-                Quantity = 4,
-                Description = "Banana"
-            });
-
-            invoice.RemoveInvoiceLine(1);
-            Console.WriteLine(invoice.GetTotal());
-        }
-
-        private static void MergeInvoices()
-        {
-            var invoice1 = new Invoice();
-
-            invoice1.AddInvoiceLine(new InvoiceLine()
-            {
-                InvoiceLineId = 1,
-                Cost = 10.33,
-                Quantity = 4,
-                Description = "Banana"
-            });
-            
-            var invoice2 = new Invoice();
-
-            invoice2.AddInvoiceLine(new InvoiceLine()
-            {
-                InvoiceLineId = 2,
-                Cost = 5.22,
-                Quantity = 1,
-                Description = "Orange"
-            });
-
-            invoice2.AddInvoiceLine(new InvoiceLine()
-            {
-                InvoiceLineId = 3,
-                Cost = 6.27,
-                Quantity = 3,
-                Description = "Blueberries"
-            });
-
-            invoice1.MergeInvoices(invoice2);
-            Console.WriteLine(invoice1.GetTotal());
-        }
-
-        private static void CloneInvoice()
-        {
-            var invoice = new Invoice();
-
-            invoice.AddInvoiceLine(new InvoiceLine()
-            {
-                InvoiceLineId = 1,
-                Cost = 6.99,
-                Quantity = 1,
-                Description = "Apple"
-            });
-
-            invoice.AddInvoiceLine(new InvoiceLine()
-            {
-                InvoiceLineId = 2,
-                Cost = 6.27,
-                Quantity = 3,
-                Description = "Blueberries"
-            });
-
-            var clonedInvoice = invoice.Clone();
-            Console.WriteLine(clonedInvoice.GetTotal());
-        }
-
-        private static void InvoiceToString()
-        {
-            var invoice = new Invoice()
-            {
-                InvoiceDate = DateTime.Now,
-                InvoiceNumber = 1000,
-                LineItems = new List<InvoiceLine>()
-                {
-                    new InvoiceLine()
-                    {
-                        InvoiceLineId = 1,
-                        Cost = 6.99,
-                        Quantity = 1,
-                        Description = "Apple"
-                    }
-                }
-            };
-   
-            Console.WriteLine(invoice.ToString());
-        }
     }
+}
