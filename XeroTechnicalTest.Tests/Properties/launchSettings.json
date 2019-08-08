@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "XeroTechnicalTest.Tests": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "logmode": "dev"
+      }
+    }
+  }
+}

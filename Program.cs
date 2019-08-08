@@ -23,7 +23,7 @@
 
 /*
  * Task Summary
- * 1. Fix compile issues: wrong spelling * 1, data type mismatching * 2.
+ * 1. Fix compile issues: includes wrong spelling, data type mismatching.
  * 2. Rearrange solution folder structure. Add Unit Test and Libary projects. 
  * 3. Implement unfinished functions.
  * 4. Add Autofaq to realize ioc.
@@ -66,22 +66,22 @@ namespace XeroTechnicalTest
                 var invoiceService = scope.Resolve<IInvoiceService>();
                 var logger = new LogManager();
 
-                logger.Log($"1. Start Task: CreateInvoiceWithOneItem");
+                logger.Log("1. Start Task: CreateInvoiceWithOneItem");
                 invoiceService.CreateInvoiceWithOneItem();
 
-                logger.Log($"2. Start Task: CreateInvoiceWithMultipleItemsAndQuantities");
+                logger.Log("2. Start Task: CreateInvoiceWithMultipleItemsAndQuantities");
                 invoiceService.CreateInvoiceWithMultipleItemsAndQuantities();
 
-                logger.Log($"3. Start Task: RemoveItem");
+                logger.Log("3. Start Task: RemoveItem");
                 invoiceService.RemoveItem();
 
-                logger.Log($"4. Start Task: MergeInvoices");
+                logger.Log("4. Start Task: MergeInvoices");
                 invoiceService.MergeInvoices();
 
-                logger.Log($"5. Start Task: CloneInvoice");
+                logger.Log("5. Start Task: CloneInvoice");
                 invoiceService.CloneInvoice();
 
-                logger.Log($"6. Start Task: InvoiceToString");
+                logger.Log("6. Start Task: InvoiceToString");
                 invoiceService.InvoiceToString();
 
             }
